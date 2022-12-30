@@ -27,9 +27,6 @@ class UserControllerSecurityTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PermissionRepository permissionRepository;
-
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
