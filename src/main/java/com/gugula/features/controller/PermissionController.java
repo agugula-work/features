@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.gugula.features.controller.ApiVersion.CURRENT_API_VERSION;
+import static com.gugula.features.controller.ApiVersion.CURRENT_API_PREFIX;
 
 @RestController
-@RequestMapping(CURRENT_API_VERSION + "/permissions")
+@RequestMapping(CURRENT_API_PREFIX + "/permissions")
 @RequiredArgsConstructor
 public class PermissionController {
 

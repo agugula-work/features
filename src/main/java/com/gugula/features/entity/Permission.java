@@ -20,10 +20,11 @@ public class Permission {
     @Column(name = "ID")
     Long id;
 
-    @Column(name = "NAME", unique = true)
+    @Column(name = "NAME", unique = true, nullable = false)
     String name;
 
-    @Column(name = "GLOBAL")
+    @Builder.Default
+    @Column(name = "GLOBAL", nullable = false)
     Boolean global = false;
 
     @Override
@@ -31,11 +32,11 @@ public class Permission {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Permission that = (Permission) o;
-        return id.equals(that.id) && name.equals(that.name) && global.equals(that.global);
+        return name.equals(that.name) && global.equals(that.global);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, global);
+        return Objects.hash(name, global);
     }
 }

@@ -12,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -27,6 +28,7 @@ public class User {
     @Column(name = "PASSWORD")
     String password;
 
+    @Builder.Default
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_2_PERMISSION",
@@ -40,11 +42,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id) && name.equals(user.name) && password.equals(user.password);
+        return name.equals(user.name) && Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, password);
+        return Objects.hash(name, password);
     }
 }

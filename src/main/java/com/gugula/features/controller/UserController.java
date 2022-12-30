@@ -1,6 +1,5 @@
 package com.gugula.features.controller;
 
-import com.gugula.features.config.security.CustomUserDetails;
 import com.gugula.features.controller.security.AuthorizeAdmin;
 import com.gugula.features.entity.Permission;
 import com.gugula.features.entity.User;
@@ -9,15 +8,16 @@ import com.gugula.features.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.gugula.features.controller.ApiVersion.CURRENT_API_VERSION;
+import static com.gugula.features.controller.ApiVersion.CURRENT_API_PREFIX;
 
 @RestController
-@RequestMapping(CURRENT_API_VERSION + "/users")
+@RequestMapping(CURRENT_API_PREFIX + "/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -49,15 +49,16 @@ public class UserController {
     }
 
     @AuthorizeAdmin
-    @PutMapping(path = "/{id}/permissions")
-    User createOrReplaceUserPermissions(@PathVariable Long id, @RequestBody String permissionName) {
-        return userPermissionService.createOrReplacePermissionForUser(id, permissionName);
+    @PostMapping(path = "/{id}/permissions")
+    User addUserPermissions(@PathVariable Long id, @RequestBody String permissionName) {
+        return userPermissionService.addPermissionForUser(id, permissionName);
     }
 
     @GetMapping(path = "/current/permissions")
     Set<Permission> getCurrentUserPermissions() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+
         return userPermissionService.getAllEnabledPermissionsForUserName(user.getUsername());
     }
 }

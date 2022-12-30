@@ -4,6 +4,7 @@ import com.gugula.features.entity.Permission;
 import com.gugula.features.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class UserPermissionService {
         return getAllEnabledPermissionsForUser(userService.getUserByName(name));
     }
 
-    public Set<Permission> getAllEnabledPermissionsForUser(User user) {
+    private Set<Permission> getAllEnabledPermissionsForUser(User user) {
         Set<Permission> assignedPermissions = user.getPermissions();
         Set<Permission> globalPermissions = permissionService.findByGlobal(true);
 
@@ -32,8 +33,9 @@ public class UserPermissionService {
                 .collect(Collectors.toSet());
     }
 
-    public User createOrReplacePermissionForUser(Long id, String permissionName) {
-        User user = userService.getUser(id);
+    @Transactional
+    public User addPermissionForUser(Long userId, String permissionName) {
+        User user = userService.getUser(userId);
         Permission permission = permissionService.getPermissionByName(permissionName);
         user.getPermissions().add(permission);
         return userService.save(user);
